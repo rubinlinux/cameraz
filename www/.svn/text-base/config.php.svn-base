@@ -1,0 +1,9 @@
+<?php
+
+//Directory and default camera settings
+$DEFAULT_BOTNAME = "netbot-s43-01";
+$DEFAULT_CAMERANAME = "nbOwlEnc_0_CAMERA";
+$BASE_DIRECTORY = "/export/data/monitor/netbotz/";
+$IMAGE_BASE_DIRECTORY = "/netbotz/data/";
+$HTML_DIRECTORY = "/export/data/monitor/www/data/netbotz/";
+?>

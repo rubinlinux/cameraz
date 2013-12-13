@@ -1,0 +1,51 @@
+K 26
+svn:wc:ra_dav:activity-url
+V 22
+/svn/physweb/!svn/act/
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/physweb/!svn/ver/699/trunk/monitor/data/netbotz
+END
+oldnetbot.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/physweb/!svn/ver/937/trunk/monitor/data/netbotz/oldnetbot.php
+END
+imagelist.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/physweb/!svn/ver/368/trunk/monitor/data/netbotz/imagelist.php
+END
+config.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/physweb/!svn/ver/368/trunk/monitor/data/netbotz/config.php
+END
+post.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/physweb/!svn/ver/699/trunk/monitor/data/netbotz/post.php
+END
+index.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/physweb/!svn/ver/368/trunk/monitor/data/netbotz/index.php
+END
+netcam.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/physweb/!svn/ver/699/trunk/monitor/data/netbotz/netcam.php
+END
+favicon.ico
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/physweb/!svn/ver/368/trunk/monitor/data/netbotz/favicon.ico
+END
