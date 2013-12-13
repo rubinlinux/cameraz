@@ -10,7 +10,7 @@
  </Location>
  */
 
-include 'config.php';
+include '../config.php';
 //$myFile = $HTML_DIRECTORY."netcam.txt";
 $myFile = "/tmp/netcam.txt";
 $DEBUGON = true;

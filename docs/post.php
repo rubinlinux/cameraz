@@ -1,6 +1,6 @@
 <?php
 
-include 'config.php';
+include '../config.php';
 //$myFile = $HTML_DIRECTORY."camera.txt";
 $myFile = "/tmp/camera.txt";
 $DEBUGON = true;
