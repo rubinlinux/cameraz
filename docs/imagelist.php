@@ -3,19 +3,19 @@
 <script language="JavaScript">
 var images = new Array();
 <?php
-include 'config.php';
-$basedir = $BASE_DIRECTORY;
+include '../config.php';
+$datadir = $DATA_DIRECTORY;
 $bot=$_GET['bot'];
 $camera=$_GET['camera'];
 $year=$_GET['year'];
 $month=$_GET['month'];
 $day=$_GET['day'];
 $event=$_GET['event'];
-if(strpos($bot,"zzzzznetbot") !== FALSE)
+if(strpos($bot,"netbot") !== FALSE)
     $imagedir = "$bot/$camera/$year/$month/$day/$event";
 else
     $imagedir = "$bot/$year/$month/$day/$event";
-$images = scandir($basedir.$imagedir);
+$images = scandir($datadir.$imagedir);
 foreach($images as $image) {
         if(strstr($image,".jpg")) {
 		echo "images.push('$image');\n";

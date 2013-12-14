@@ -1,5 +1,11 @@
-<?
-include '../config.php';
+<?php
+require('../config.php');
+
+$grpaccess = array(
+	"sysadm" => array("all"),
+	"admin"  => array("netbot-24-01", "netbot-80-01", "netcam-17-1", "netcam-ld-1"),
+);
+
 ?>
 
 <html>
@@ -17,35 +23,62 @@ BUTTON { _vertical-align:middle; }
 <body style="margin-top:10px;margin-bottom:0;">
 <?php
 
-$basedir = $BASE_DIRECTORY;
+//$basedir = $BASE_DIRECTORY;
+$datadir = $DATA_DIRECTORY;
 $imagedir = $IMAGE_BASE_DIRECTORY;
-$dirs = scandir($basedir);
+$dirs = scandir($datadir);
+$user = $_SERVER['REDIRECT_AUTHENTICATE_UID'];
+
 $numbotz = 0;
 $botz = array();
 foreach($dirs as $botname) {
-	if(strpos($botname,".") !== 0 && is_dir($basedir.$botname)) {
-        $botz[$botname]['cameras'] = array();
-        if(strpos($botname,"xxxxxxxnetbot") !== FALSE) {
-            $botdirs = scandir($basedir.$botname);
-            foreach($botdirs as $camera) {
-                if(strpos($camera,"nb") !== FALSE && is_dir("$basedir$botname/$camera")) {
-                    $botz[$botname]['cameras'][$camera] = array("dir" => "$basedir$botname/$camera", "imagedir" => "$imagedir$botname/$camera");
-                    $cameradirs = scandir("$basedir$botname/$camera");
-                    foreach($cameradirs as $file) {
-                        if($file == "description") {
-                            $fh = fopen("$basedir$botname/$camera/$file", 'r');
-                            $botz[$botname]['cameras'][$camera]['description'] = fread($fh, 100);
-                            fclose($fh);
+	if(strpos($botname,".") !== 0 && is_dir($datadir.$botname)) {
+            $botz[$botname]['cameras'] = array();
+            if(strpos($botname,"netbot") !== FALSE) { // TODO: the name has to contain netbot to work?!?
+                $botdirs = scandir($datadir.$botname);
+                foreach($botdirs as $camera) {
+                    if(strpos($camera,"nb") !== FALSE && is_dir("$datadir$botname/$camera")) {
+                        $botz[$botname]['cameras'][$camera] = array("dir" => "$datadir$botname/$camera", "imagedir" => "$imagedir$botname/$camera");
+                        $cameradirs = scandir("$datadir$botname/$camera");
+                        foreach($cameradirs as $file) {
+                            if($file == "description") {
+                                $fh = fopen("$datadir$botname/$camera/$file", 'r');
+                                $botz[$botname]['cameras'][$camera]['description'] = fread($fh, 100);
+                                fclose($fh);
+                            }
                         }
+                        $numbotz++;
                     }
-                    $numbotz++;
                 }
+            } else {
+                $numbotz++;
+                $botz[$botname]['cameras'][] = array("dir" => $datadir.$botname, "imagedir" => "$imagedir$botname");
             }
-        } else {
-            $numbotz++;
-            $botz[$botname]['cameras'][] = array("dir" => $basedir.$botname, "imagedir" => "$imagedir$botname");
-        }
 	}
+}
+
+$usergroups = array();
+/*
+foreach(array_keys($grpaccess) as $group) {
+	$garray = posix_getgrnam($group);
+	if (in_array($user, $garray['members'])) {
+		array_push($usergroups, $group);
+	}
+}
+*/
+
+if($USE_SECURITY) {
+    foreach(array_keys($botz) as $nbot) {
+            $has_access = false;
+            foreach($usergroups as $group) {
+                    if (in_array($nbot, $grpaccess["$group"]) || in_array("all", $grpaccess["$group"])) {
+                            $has_access = true;
+                    }
+            }
+            if (!$has_access) {
+                    unset($botz["$nbot"]);
+            }
+    }
 }
 
 $botname = $_GET['bot'];
@@ -60,6 +93,20 @@ if(!$botname || !isset($botz[$botname])) {
     $bot = $botz[$botname];
 }
 else $bot = $botz[$botname];
+
+if (!array_key_exists($botname, $botz)) {
+	if ($USE_SECURITY && empty($botz)) {
+		exit("You do not have access to any cameras!");
+	}
+	else {
+		$nkeys = array_keys($botz);
+		$botname = $nkeys[0];
+		$bot = $botz[$botname];
+		$nkeys = array_keys($botz[$botname]['cameras']);
+		$cameraname=$nkeys[0];
+#		$cameraname = $botz[$botname]['cameras'];
+	}
+}
 
 if(!$cameraname || !isset($bot['cameras'][$cameraname])) {
     $cameraname = 0;
@@ -109,10 +156,6 @@ echo "<DIV class=header>Current Event</DIV>\n";
 echo "</DIV>\n";
 echo "<DIV id=\"eventlist\" style=\"margin-left:15;width:160px;overflow:auto;\">\n";
 
-if(strlen($camera['dir']) < 1) {
-    echo "ERROR: Camera directory empty string!\n<BR>";
-    exit;
-}
 $years = scandir($camera['dir']);
 $eventnum = 0;
 
@@ -227,7 +270,7 @@ function loadImages() {
 		images[i] = new Image();
 		images[i].onLoad = imageComplete();
 		images[i].src = imageBaseURL+parent.imagelist.images[i];
-		imageListHTML += "<a href=\"javascript:changeImage("+i+")\"><img alt=\""+parent.imagelist.images[i]+"\" id=\""+parent.imagelist.images[i]+"\" style=\"border-color:white;border-width:3;width:100px;\" src=\""+imageBaseURL+parent.imagelist.images[i]+"\"><\/a><br>\n";
+		imageListHTML += "<a href=\"javascript:changeImage("+i+")\"><img alt=\""+parent.imagelist.images[i]+"\" id=\""+parent.imagelist.images[i]+"\" style=\"border-color:white;border-width:0 3px; width:100px; border-style: solid; border-collapse: collapse;\" src=\""+imageBaseURL+parent.imagelist.images[i]+"\"><\/a><br>\n";
 	}
 	imageListHTML += "<\/center>\n";
 	document.getElementById('imageslist').innerHTML = imageListHTML;

@@ -23,7 +23,7 @@ echo date("YmdHis")."\n";
 $host = gethostbyaddr($_SERVER['REMOTE_ADDR']);
 $host = substr($host,0,strpos($host,'.'));
 $timestamp = date("YmdHis");
-$dataroot = $BASE_DIRECTORY;
+$dataroot = $DATA_DIRECTORY;
 $uploaddir = "$dataroot$host/upload/";
 $found = "";
 $files = FALSE;
@@ -37,7 +37,7 @@ $data = "";
 //Detect if submitted from private address
 //if((strpos($_SERVER['REMOTE_ADDR'],'192.168.') !== FALSE or $_SERVER['REMOTE_ADDR'] == '128.101.221.139' ) && strpos($host,'netbot') !== FALSE) {
 //if((strpos($_SERVER['REMOTE_ADDR'],'192.168.') !== FALSE || $_SERVER['REMOTE_ADDR'] == '128.101.220.229' ) && strpos($host,'netbot') !== FALSE) {
-if(strpos($host, 'netbot') !== FALSE || strpos($host, 'snark') !== FALSE) {
+if(1 || strpos($host, 'netbot') !== FALSE || strpos($host, 'snark') !== FALSE) {
 
     //Create upload directory if missing
     if (!file_exists(dirname($uploaddir))) {
@@ -97,7 +97,7 @@ if(!$xmlfilename) {
     return cleanup();
 }
 if(!$cameraname) {
-    echo "ERROR: Failed to parse camera name from XML file!\n";
+    echo "ERROR: Failed to parse camera name from XML file! If this was a botzware 'test' this is normal.\n";
     return cleanup();
 }
 
@@ -128,6 +128,7 @@ elseif($type == "door") {
 	if(unlink($uploaddir.$xmlfilename)) echo "Door Switch XML file deleted successfully.\n";
 	else echo "Could not delete Door Switch XML file.\n";
 
+        /*
 	$link = mysql_connect('mysql', 'netbotz', '!netb0tz')
 	    or die('Could not connect: ' . mysql_error());
 	echo "Connected successfully!\n";
@@ -142,6 +143,7 @@ elseif($type == "door") {
 
 	// Closing connection
 	mysql_close($link);
+        */
 }
 elseif($type == "motion") {
     if($files) {
@@ -176,7 +178,7 @@ elseif($type == "motion") {
                 else echo " was not moved.\n";
             }
             elseif (move_uploaded_file($value['tmp_name'],$destination."/".$timestamp.$filename)) {
-                echo " moved successfully.\n";
+                echo " moved successfully desc=$destination timestamp=$timestamp,filename=$filename.\n";
                 chmod($destination."/".$timestamp.$filename,0664);
             } else {
                 echo " was not moved.\n";
