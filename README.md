@@ -39,6 +39,7 @@ Setup an alias in your webserver (apache example here) like this:
 Copy config.php.example to config.php and set the paths up correctly.
 
 Make sure the data directory is writable to the web-server user:
+
     sudo chown -R www-data /var/lib/www/cameraz/data
 
 you can test it out by enabling some debug code. It writes debug log to /tmp but don't leave
@@ -52,9 +53,12 @@ Now you need to set up the camera to 'post' to the application. Config varies by
 The different php files are for different cameras. We could use some contributions in this area
 to figure out what works and with what. But here is my guess:
 
-  netcam.php - axis network cameras
-  oldnetbot.php - old old netbots such as 320
-  post.php - modern netbots such as 500
-  test.php - helpful file for debugging...
+    netcam.php - axis network cameras
+
+    oldnetbot.php - old old netbots such as 320
+
+    post.php - modern netbots such as 500
+
+    test.php - helpful file for debugging...
 
 finally, the index.php provides the UI to viewing the recorded images. Good luck!
